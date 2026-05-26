@@ -20,8 +20,12 @@ textarea.is{resize:vertical;min-height:70px;}
 <body>
 <div id="app"><div style="padding:2rem;color:#666">Connecting to Supabase...</div></div>
 <script>
+// ══════════════════════════════════════════════════════
+// 👇 YOUR FRIEND NEEDS TO CHANGE THESE TWO LINES ONLY
 const SUPA_URL="https://wwcwiobbetizfbqwufvt.supabase.co";
 const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3Y3dpb2JiZXRpemZicXd1ZnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MDAxOTEsImV4cCI6MjA5MDM3NjE5MX0.ma4_zIE5MVnFN38B4QLoz6bzpQSsaZbH-WAwo7lNDv4";
+// ══════════════════════════════════════════════════════
+
 const H={"apikey":SUPA_KEY,"Authorization":"Bearer "+SUPA_KEY,"Content-Type":"application/json"};
 
 async function dbLoad(){
@@ -46,13 +50,13 @@ const PB={
     "Further Stats 1":{2024:{as:56,a:48,b:40,max:75},2023:{as:60,a:53,b:43,max:75},2022:{as:59,a:49,b:39,max:75},2019:{as:67,a:56,b:47,max:75}},
   },
   "Computer Science":{
-    "H446/01 Computer Systems":{2024:{as:107,a:93,b:78,max:140},2023:{as:100,a:87,b:72,max:140},2022:{as:88,a:76,b:62,max:140},2019:{as:108,a:94,b:79,max:140}},
-    "H446/02 Algorithms & Programming":{2024:{as:112,a:97,b:81,max:140},2023:{as:104,a:90,b:74,max:140},2022:{as:93,a:80,b:65,max:140},2019:{as:112,a:97,b:82,max:140}},
+    "H446/01 Computer Systems":{2024:{as:115,a:101,b:85,max:140},2023:{as:103,a:95,b:75,max:140},2022:{as:100,a:86,b:71,max:140},2019:{as:108,a:94,b:79,max:140}},
+    "H446/02 Algorithms & Programming":{2024:{as:114,a:99,b:83,max:140},2023:{as:120,a:105,b:88,max:140},2022:{as:105,a:98,b:78,max:140},2019:{as:114,a:101,b:86,max:140}},
   },
 };
 const B25={
   "Maths":{"Paper 1 (Pure)":{as:88,a:74,b:61,max:100},"Paper 2 (Pure)":{as:83,a:67,b:55,max:100},"Paper 3 (Stats & Mech)":{as:87,a:73,b:61,max:100}},
-  "Further Maths":{"Core Pure 1":{as:62,a:53,b:45,max:75},"Core Pure 2":{as:70,a:61,b:52,max:75},"Further Mech 1":{as:58,a:51,b:44,max:75},"Further Stats 1":{as:54,a:50,b:43,max:75}},
+  "Further Maths":{"Core Pure 1":{as:62,a:53,b:45,max:75},"Core Pure 2":{as:70,a:61,b:52,max:75},"Further Mech 1":{as:72,a:68,b:57,max:75},"Further Stats 1":{as:58,a:51,b:44,max:75}},
   "Computer Science":{"H446/01 Computer Systems":{as:112,a:99,b:84,max:140},"H446/02 Algorithms & Programming":{as:116,a:101,b:85,max:140}},
 };
 const ALB={
@@ -203,7 +207,6 @@ function buildPaperRow(p){
   const sp=(sc!==null&&b)?pct(sc,b.max):null;
   const col=gl?gl.c:"#B4B2A9";
   const displayName=p.displayPaper||p.paper;
-
   const rowHead=div({style:{display:"flex",alignItems:"center",gap:"8px",padding:"9px 14px",cursor:"pointer",background:open?"#f7f7f5":"transparent",userSelect:"none"},
     onClick:()=>{const op={...state.openPapers};op[p.id]=!open;setState({openPapers:op});}
   },[
@@ -217,12 +220,9 @@ function buildPaperRow(p){
       onClick:e=>{e.stopPropagation();setState({customPapers:state.customPapers.filter(x=>x.id!==p.id)});schedSave();}
     },"✕"):null,
   ]);
-
   const wrap=div({style:{borderTop:"0.5px solid #e8e8e4"}},[rowHead]);
   if(!open)return wrap;
-
   const body=div({style:{padding:"14px",background:"#f7f7f5",borderTop:"0.5px solid #e8e8e4"}});
-
   const scoreInp=liveInp(
     {type:"number",class:"is",placeholder:"e.g. 78",value:d.grade||""},
     val=>{if(!state.paperData[p.id])state.paperData[p.id]={};state.paperData[p.id].grade=val;}
@@ -233,12 +233,10 @@ function buildPaperRow(p){
     state.paperData[p.id].dateDone=e.target.value;
     schedSave();render();
   });
-
   const grid=div({style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"12px"}});
   grid.appendChild(div({},[el("label",{style:{fontSize:"11px",color:"#6b6b68",display:"block",marginBottom:"4px"}},"Score /"+(b?b.max:100)),scoreInp]));
   grid.appendChild(div({},[el("label",{style:{fontSize:"11px",color:"#6b6b68",display:"block",marginBottom:"4px"}},"Date done"),dateInp]));
   body.appendChild(grid);
-
   if(sc!==null&&b){
     const bDiv=div({style:{marginBottom:"12px"}});
     const bar=div({style:{height:"7px",borderRadius:"4px",background:"#e8e8e4",overflow:"hidden",marginBottom:"8px"}});
@@ -262,7 +260,6 @@ function buildPaperRow(p){
     }
     body.appendChild(bDiv);
   }
-
   const subtab=state.paperSubtabs[p.id]||"wrong";
   const stRow=div({style:{display:"flex",borderBottom:"0.5px solid #e8e8e4",marginBottom:"10px"}});
   ["wrong","notes"].forEach(t=>{
@@ -272,7 +269,6 @@ function buildPaperRow(p){
     },t==="wrong"?"Topics Wrong":"Notes"));
   });
   body.appendChild(stRow);
-
   const taKey=subtab==="wrong"?"wrongTopics":"notes";
   body.appendChild(liveTa(
     {class:"is",placeholder:subtab==="wrong"?"e.g. circle theorems, integration by parts...":"Notes about this paper..."},
@@ -348,7 +344,7 @@ function buildWeakTopics(papers){
   if(!rows.length)return div({style:{padding:"32px",textAlign:"center",color:"#6b6b68",fontSize:"13px",border:"0.5px solid #e8e8e4",borderRadius:"12px"}},"No weak topics yet. In Past Papers, open a paper and type topics you got wrong.");
 
   const wtFilter=state.wtFilter;
-  const subjects=["All",...new Set(rows.map(r=>r.subject))];
+  const subjects=["All",...[...new Set(rows.map(r=>r.subject))]];
   const filtered=wtFilter==="All"?rows:rows.filter(r=>r.subject===wtFilter);
   const pending=filtered.filter(r=>!state.doneTopics[r.id]);
   const done=filtered.filter(r=>!!state.doneTopics[r.id]);
@@ -356,7 +352,7 @@ function buildWeakTopics(papers){
   const wrap=div({});
 
   // Filter chips
-  const chipRow=div({style:{display:"flex",gap:"4px",flexWrap:"wrap",marginBottom:"12px",alignItems:"center"}});
+  const chipRow=div({style:{display:"flex",gap:"4px",flexWrap:"wrap",marginBottom:"12px"}});
   subjects.forEach(s=>{
     const count=s==="All"?rows.length:rows.filter(r=>r.subject===s).length;
     chipRow.appendChild(btn({
@@ -366,9 +362,8 @@ function buildWeakTopics(papers){
   });
   wrap.appendChild(chipRow);
 
-  // Summary line
   wrap.appendChild(div({style:{fontSize:"11px",color:"#6b6b68",marginBottom:"10px"}},
-    pending.length+" pending · "+done.length+" done"+(wtFilter!=="All"?" in "+wtFilter:"")));
+    pending.length+" pending · "+done.length+" done"+(wtFilter!=="All"?" · "+wtFilter:"")));
 
   const renderCard=t=>{
     const isDone=!!state.doneTopics[t.id];
@@ -385,12 +380,10 @@ function buildWeakTopics(papers){
   };
 
   pending.forEach(t=>wrap.appendChild(renderCard(t)));
-
   if(done.length){
     wrap.appendChild(div({style:{fontSize:"11px",color:"#9b9b98",marginTop:"12px",marginBottom:"6px",paddingTop:"8px",borderTop:"0.5px solid #e8e8e4"}},"Completed ("+done.length+")"));
     done.forEach(t=>wrap.appendChild(renderCard(t)));
   }
-
   return wrap;
 }
 
@@ -398,17 +391,13 @@ function buildAddModal(){
   const f=state.addForm;
   const b25ref=((B25[f.subject]||{})[f.paper])||null;
   const maxN=parseInt(f.maxMarks)||0;
-
   const wrap=div({style:{background:"#fff",border:"0.5px solid #85B7EB",borderRadius:"12px",padding:"16px",marginBottom:"12px"}});
   wrap.appendChild(div({style:{fontSize:"13px",fontWeight:500,marginBottom:"12px"}},"Add a custom paper"));
-
   const grid=div({style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px",marginBottom:"12px"}});
-
   const subjSel=el("select",{class:"is"});
   ["Maths","Further Maths","Computer Science"].forEach(o=>{const opt=el("option",{value:o},o);if(o===f.subject)opt.selected=true;subjSel.appendChild(opt);});
   subjSel.addEventListener("change",e=>setState({addForm:{...state.addForm,subject:e.target.value,paper:"",useCustom:false}}));
   grid.appendChild(div({},[el("label",{style:{fontSize:"11px",color:"#6b6b68",display:"block",marginBottom:"4px"}},"Subject"),subjSel]));
-
   const paperSel=el("select",{class:"is"});
   [el("option",{value:""},"Select..."),...ALL_PAPER_OPTS.map(o=>{const opt=el("option",{value:o},o);if(o===f.paper)opt.selected=true;return opt;})].forEach(o=>paperSel.appendChild(o));
   paperSel.addEventListener("change",e=>{
@@ -424,7 +413,6 @@ function buildAddModal(){
     ));
   }
   grid.appendChild(paperDiv);
-
   grid.appendChild(div({},[
     el("label",{style:{fontSize:"11px",color:"#6b6b68",display:"block",marginBottom:"4px"}},"Year"),
     liveInp({type:"text",class:"is",placeholder:"e.g. 2025",value:f.year},val=>{state.addForm.year=val;}),
@@ -438,13 +426,10 @@ function buildAddModal(){
   ld.appendChild(liveInp({type:"text",class:"is",placeholder:"e.g. PMT Set A",value:f.label},val=>{state.addForm.label=val;}));
   grid.appendChild(ld);
   wrap.appendChild(grid);
-
   const bDiv=div({style:{marginBottom:"12px"}});
   bDiv.appendChild(div({style:{fontSize:"11px",color:"#6b6b68",marginBottom:"6px"}},"Grade boundaries"));
   const bRow=div({style:{display:"flex",gap:"8px",marginBottom:"8px",flexWrap:"wrap"}});
-
   if(b25ref){
-    // Show toggle only when 2025 data exists for this paper
     bRow.appendChild(btn({style:{fontSize:"11px",padding:"4px 12px",borderRadius:"6px",border:"0.5px solid "+(!f.useCustom?"#185FA5":"#e8e8e4"),background:!f.useCustom?"#E6F1FB":"transparent",color:!f.useCustom?"#0C447C":"#6b6b68",cursor:"pointer"},
       onClick:()=>setState({addForm:{...state.addForm,useCustom:false}})
     },"Use 2025"));
@@ -453,9 +438,7 @@ function buildAddModal(){
     },"Enter manually"));
   }
   bDiv.appendChild(bRow);
-
   if(b25ref&&!f.useCustom){
-    // Show 2025 boundaries immediately, scale if total marks entered
     const scaledAs=maxN>0?Math.round(b25ref.as/b25ref.max*maxN):b25ref.as;
     const scaledA =maxN>0?Math.round(b25ref.a /b25ref.max*maxN):b25ref.a;
     const scaledB =maxN>0?Math.round(b25ref.b /b25ref.max*maxN):b25ref.b;
@@ -463,8 +446,6 @@ function buildAddModal(){
     bDiv.appendChild(div({style:{fontSize:"10px",color:"#0C447C",padding:"6px 10px",background:"#E6F1FB",borderRadius:"6px",border:"0.5px solid #85B7EB"}},
       "2025 boundaries"+(maxN>0&&maxN!==b25ref.max?" (scaled to /"+dispMax+")":"")+" — A*: "+scaledAs+", A: "+scaledA+", B: "+scaledB+" /"+dispMax));
   }
-
-  // Show manual fields when useCustom OR no b25ref for this paper
   if(f.useCustom||!b25ref){
     const cg=div({style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"6px"}});
     [["A*","bAs"],["A","bA"],["B","bB"]].forEach(([l,k])=>{
@@ -476,7 +457,6 @@ function buildAddModal(){
     bDiv.appendChild(cg);
   }
   wrap.appendChild(bDiv);
-
   const isIncomplete=!f.paper||!f.year||!f.maxMarks;
   wrap.appendChild(div({style:{display:"flex",gap:"8px"}},[
     btn({style:{fontSize:"12px",padding:"6px 16px",borderRadius:"7px",border:"none",background:isIncomplete?"#ccc":"#0F6E56",color:"white",cursor:isIncomplete?"default":"pointer"},
@@ -489,7 +469,7 @@ function buildAddModal(){
         const mn=parseInt(af.maxMarks);
         let cb;
         if(af.useCustom||!b25r){cb={as:af.bAs?parseInt(af.bAs):null,a:parseInt(af.bA)||0,b:parseInt(af.bB)||0,max:mn};}
-        else if(b25r){cb={as:b25r.as?Math.round(b25r.as/b25r.max*mn):null,a:Math.round(b25r.a/b25r.max*mn),b:Math.round(b25r.b/b25r.max*mn),max:mn};}
+        else{cb={as:b25r.as?Math.round(b25r.as/b25r.max*mn):null,a:Math.round(b25r.a/b25r.max*mn),b:Math.round(b25r.b/b25r.max*mn),max:mn};}
         const np={id:"custom_"+Date.now(),subject:af.subject,paper:finalPaper,displayPaper,year:af.year.trim(),customBoundary:cb,pmtUrl:""};
         setState({customPapers:[...state.customPapers,np],showAdd:false});
         schedSave();
@@ -509,5 +489,39 @@ dbLoad().then(saved=>{
   render();
 }).catch(e=>{console.error("Load error:",e);render();});
 </script>
+
+<!--
+════════════════════════════════════════════════════════
+  INSTRUCTIONS FOR YOUR FRIEND TO SET UP THEIR OWN DATABASE
+════════════════════════════════════════════════════════
+
+1. Go to https://supabase.com and sign up for a free account.
+
+2. Click "New project", give it any name (e.g. "revision-hub"),
+   choose a region close to you, set a database password and save it.
+
+3. Once the project loads, go to the left sidebar → "Table Editor"
+   → click "New table" and set it up like this:
+     • Name:          revision_data
+     • Uncheck "Enable Row Level Security (RLS)"  ← important!
+     • Columns (add these manually):
+         id          text   (primary key, uncheck "Is Nullable")
+         data        jsonb
+         updated_at  timestamptz
+
+4. Go to the left sidebar → "Project Settings" → "API".
+   You will see:
+     • Project URL  → copy this
+     • Project API keys → copy the "anon public" key
+
+5. In the HTML file, find these two lines near the top of the script:
+     const SUPA_URL = "https://...";
+     const SUPA_KEY = "eyJ...";
+   Replace them with YOUR Project URL and YOUR anon key.
+
+6. Save the file and open it in any browser — your data is now
+   stored separately from anyone else's.
+════════════════════════════════════════════════════════
+-->
 </body>
 </html>

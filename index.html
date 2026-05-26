@@ -20,12 +20,8 @@ textarea.is{resize:vertical;min-height:70px;}
 <body>
 <div id="app"><div style="padding:2rem;color:#666">Connecting to Supabase...</div></div>
 <script>
-// ══════════════════════════════════════════════════════
-// 👇 YOUR FRIEND NEEDS TO CHANGE THESE TWO LINES ONLY
 const SUPA_URL="https://wwcwiobbetizfbqwufvt.supabase.co";
 const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3Y3dpb2JiZXRpemZicXd1ZnZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4MDAxOTEsImV4cCI6MjA5MDM3NjE5MX0.ma4_zIE5MVnFN38B4QLoz6bzpQSsaZbH-WAwo7lNDv4";
-// ══════════════════════════════════════════════════════
-
 const H={"apikey":SUPA_KEY,"Authorization":"Bearer "+SUPA_KEY,"Content-Type":"application/json"};
 
 async function dbLoad(){
@@ -50,14 +46,26 @@ const PB={
     "Further Stats 1":{2024:{as:56,a:48,b:40,max:75},2023:{as:60,a:53,b:43,max:75},2022:{as:59,a:49,b:39,max:75},2019:{as:67,a:56,b:47,max:75}},
   },
   "Computer Science":{
-    "H446/01 Computer Systems":{2024:{as:115,a:101,b:85,max:140},2023:{as:103,a:95,b:75,max:140},2022:{as:100,a:86,b:71,max:140},2019:{as:108,a:94,b:79,max:140}},
-    "H446/02 Algorithms & Programming":{2024:{as:114,a:99,b:83,max:140},2023:{as:120,a:105,b:88,max:140},2022:{as:105,a:98,b:78,max:140},2019:{as:114,a:101,b:86,max:140}},
+    "H446/01 Computer Systems":{2024:{as:107,a:93,b:78,max:140},2023:{as:100,a:87,b:72,max:140},2022:{as:88,a:76,b:62,max:140},2019:{as:108,a:94,b:79,max:140}},
+    "H446/02 Algorithms & Programming":{2024:{as:112,a:97,b:81,max:140},2023:{as:104,a:90,b:74,max:140},2022:{as:93,a:80,b:65,max:140},2019:{as:112,a:97,b:82,max:140}},
   },
 };
 const B25={
-  "Maths":{"Paper 1 (Pure)":{as:88,a:74,b:61,max:100},"Paper 2 (Pure)":{as:83,a:67,b:55,max:100},"Paper 3 (Stats & Mech)":{as:87,a:73,b:61,max:100}},
-  "Further Maths":{"Core Pure 1":{as:62,a:53,b:45,max:75},"Core Pure 2":{as:70,a:61,b:52,max:75},"Further Mech 1":{as:72,a:68,b:57,max:75},"Further Stats 1":{as:58,a:51,b:44,max:75}},
-  "Computer Science":{"H446/01 Computer Systems":{as:112,a:99,b:84,max:140},"H446/02 Algorithms & Programming":{as:116,a:101,b:85,max:140}},
+  "Maths":{
+    "Paper 1 (Pure)":{as:88,a:74,b:61,max:100},
+    "Paper 2 (Pure)":{as:83,a:67,b:55,max:100},
+    "Paper 3 (Stats & Mech)":{as:87,a:73,b:61,max:100},
+  },
+  "Further Maths":{
+    "Core Pure 1":{as:62,a:53,b:45,max:75},
+    "Core Pure 2":{as:70,a:61,b:52,max:75},
+    "Further Mech 1":{as:72,a:68,b:57,max:75},
+    "Further Stats 1":{as:58,a:51,b:44,max:75},
+  },
+  "Computer Science":{
+    "H446/01 Computer Systems":{as:112,a:99,b:84,max:140},
+    "H446/02 Algorithms & Programming":{as:116,a:101,b:85,max:140},
+  },
 };
 const ALB={
   "Maths":{2025:{as:258,a:214,b:178,max:300},2024:{as:251,a:205,b:167,max:300},2023:{as:244,a:196,b:158,max:300},2022:{as:217,a:164,b:130,max:300},2019:{as:217,a:165,b:134,max:300}},
@@ -342,29 +350,20 @@ function buildWeakTopics(papers){
     });
   });
   if(!rows.length)return div({style:{padding:"32px",textAlign:"center",color:"#6b6b68",fontSize:"13px",border:"0.5px solid #e8e8e4",borderRadius:"12px"}},"No weak topics yet. In Past Papers, open a paper and type topics you got wrong.");
-
   const wtFilter=state.wtFilter;
-  const subjects=["All",...[...new Set(rows.map(r=>r.subject))]];
+  const subjects=["All",...new Set(rows.map(r=>r.subject))];
   const filtered=wtFilter==="All"?rows:rows.filter(r=>r.subject===wtFilter);
   const pending=filtered.filter(r=>!state.doneTopics[r.id]);
   const done=filtered.filter(r=>!!state.doneTopics[r.id]);
-
   const wrap=div({});
-
-  // Filter chips
-  const chipRow=div({style:{display:"flex",gap:"4px",flexWrap:"wrap",marginBottom:"12px"}});
+  const chipRow=div({style:{display:"flex",gap:"4px",flexWrap:"wrap",marginBottom:"12px",alignItems:"center"}});
   subjects.forEach(s=>{
     const count=s==="All"?rows.length:rows.filter(r=>r.subject===s).length;
-    chipRow.appendChild(btn({
-      class:"chip"+(wtFilter===s?" active":""),
-      onClick:()=>setState({wtFilter:s})
-    },s+(s!=="All"?" ("+count+")":"")));
+    chipRow.appendChild(btn({class:"chip"+(wtFilter===s?" active":""),onClick:()=>setState({wtFilter:s})},s+(s!=="All"?" ("+count+")":"")));
   });
   wrap.appendChild(chipRow);
-
   wrap.appendChild(div({style:{fontSize:"11px",color:"#6b6b68",marginBottom:"10px"}},
     pending.length+" pending · "+done.length+" done"+(wtFilter!=="All"?" · "+wtFilter:"")));
-
   const renderCard=t=>{
     const isDone=!!state.doneTopics[t.id];
     const card=div({style:{background:"#fff",border:"0.5px solid "+(isDone?"#e8e8e4":"#AFA9EC"),borderRadius:"10px",padding:"10px 14px",marginBottom:"6px",opacity:isDone?"0.5":"1"}});
@@ -378,7 +377,6 @@ function buildWeakTopics(papers){
     card.appendChild(row);
     return card;
   };
-
   pending.forEach(t=>wrap.appendChild(renderCard(t)));
   if(done.length){
     wrap.appendChild(div({style:{fontSize:"11px",color:"#9b9b98",marginTop:"12px",marginBottom:"6px",paddingTop:"8px",borderTop:"0.5px solid #e8e8e4"}},"Completed ("+done.length+")"));
@@ -489,39 +487,5 @@ dbLoad().then(saved=>{
   render();
 }).catch(e=>{console.error("Load error:",e);render();});
 </script>
-
-<!--
-════════════════════════════════════════════════════════
-  INSTRUCTIONS FOR YOUR FRIEND TO SET UP THEIR OWN DATABASE
-════════════════════════════════════════════════════════
-
-1. Go to https://supabase.com and sign up for a free account.
-
-2. Click "New project", give it any name (e.g. "revision-hub"),
-   choose a region close to you, set a database password and save it.
-
-3. Once the project loads, go to the left sidebar → "Table Editor"
-   → click "New table" and set it up like this:
-     • Name:          revision_data
-     • Uncheck "Enable Row Level Security (RLS)"  ← important!
-     • Columns (add these manually):
-         id          text   (primary key, uncheck "Is Nullable")
-         data        jsonb
-         updated_at  timestamptz
-
-4. Go to the left sidebar → "Project Settings" → "API".
-   You will see:
-     • Project URL  → copy this
-     • Project API keys → copy the "anon public" key
-
-5. In the HTML file, find these two lines near the top of the script:
-     const SUPA_URL = "https://...";
-     const SUPA_KEY = "eyJ...";
-   Replace them with YOUR Project URL and YOUR anon key.
-
-6. Save the file and open it in any browser — your data is now
-   stored separately from anyone else's.
-════════════════════════════════════════════════════════
--->
 </body>
 </html>
